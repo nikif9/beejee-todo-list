@@ -9,6 +9,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
     const dispatch = useDispatch();
     const [newTask, setNewTask] = useState({ id: '', username: '', email: '', task_text: '' });
     const [successModalIsOpen, setSuccessModalIsOpen] = useState(false);
+    const [buttonIsDisable, setButtonIsDisable] = useState(false);
     const [successModalText, setSuccessModalText] = useState('');
 
     useEffect(() => {
@@ -28,8 +29,8 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
             }else{
                 handleOpenSuccessModal('Задача успешно добавлено')
             }
-            
         }
+        setButtonIsDisable(false)
     }, [errors]);
 
     const handleChange = event => {
@@ -43,10 +44,12 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
     const Submit = event => {
         event.preventDefault();
         if (!isEdit) {
+            setButtonIsDisable(true)
             dispatch(addTask(newTask, currentPage, sortOption));
         } else {
             const authKey = localStorage.getItem('authenticationKey')
             if (editableTask.task_text !== newTask.task_text.trim()) {
+                setButtonIsDisable(true)
                 dispatch(editTask(newTask, currentPage, sortOption, authKey));
             }else{
                 onRequestClose();
@@ -72,7 +75,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
     return (
         <div>
             <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-                <h2>Add Task</h2>
+                <h2> {!isEdit ? "Add Task" : "Edit Task"}</h2>
                 <form onSubmit={Submit} >
                     <h1> {errors.updateTaskTableError} </h1>
                     <label htmlFor="username">Username:</label>
@@ -84,7 +87,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
                     <label htmlFor="task_text">Task:</label>
                     <textarea id="task_text" name="task_text" value={newTask.task_text} onChange={handleChange} required />
                     <p></p>
-                    <button type="submit"> {!isEdit ? "Add" : "Edit"}</button>
+                    <button type="submit" disabled={buttonIsDisable}> {!isEdit ? "Add" : "Edit"}</button>
                     <button onClick={onRequestClose}>Cancel</button>
                 </form>
                 
