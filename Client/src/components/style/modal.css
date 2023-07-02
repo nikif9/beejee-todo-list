@@ -1,0 +1,41 @@
+.ReactModal__Overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.ReactModal__Content {
+    width: 500px;
+    height: 250px;
+    margin: auto;
+    text-align: center;
+}
+
+.successText {
+    padding-top: 15%;
+}
+
+form>button {
+    width: 50%;
+}
+
+form>button.login {
+    width: 100%;
+}
+
+input.password {
+    width: 50%;
+}
+
+input.login {
+    width: 50%;
+}
+
+form>textarea {
+    vertical-align: middle;
+}
+
+label {
+    margin-right: 10px;
+}

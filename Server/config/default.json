@@ -1,0 +1,12 @@
+{
+    "db": {
+        "user": "postgres",
+        "host": "localhost",
+        "database": "toDoList",
+        "password": "password",
+        "port": 5432
+    },
+    "server":{
+        "port": 5000
+    }
+}

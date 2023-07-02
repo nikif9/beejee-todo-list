@@ -1,0 +1,26 @@
+.task-list-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.task-card {
+    width: 33%;
+    min-width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.complete {
+    background-color: green;
+}

@@ -1,0 +1,47 @@
+.pagination {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    padding: 5px 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    color: #333;
+    text-decoration: none;
+}
+
+.page-link:hover {
+    background-color: #ccc;
+}
+
+
+
+.auth-button-container {
+    float: right;
+    margin-right: 10px;
+}
+
+.auth-button-container button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.auth-button-container button:hover {
+    background-color: #e0e0e0;
+}
+
+.page-item,
+.active>a {
+    background-color: #8a8a8a !important;
+}
