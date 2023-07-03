@@ -13,7 +13,7 @@ const dataBaseModel = new DataBaseModel();
 
 app.use(bodyParser.json());
 app.use(cors());
-
+// авторизация
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -55,13 +55,13 @@ app.post('/tasks', async (req, res) => {
 // изменения задачи
 app.post('/editTask', authenticateToken, async (req, res) => {
     try {
-        const { username, email, task_text, id } = req.body;
+        const { task_text, id } = req.body;
 
         if (task_text.trim() == '' || id == '') {
             throw 'не заполнено поле';
         }
 
-        await dataBaseModel.editTask(username, email, task_text.trim(), id);
+        await dataBaseModel.editTask(task_text.trim(), id);
         res.sendStatus(201);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -94,7 +94,7 @@ app.get('/tasks', async (req, res) => {
         res.status(500).json({ error: err });
     }
 });
-
+// проверка авторизации
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];

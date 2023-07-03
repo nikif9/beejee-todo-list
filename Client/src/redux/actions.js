@@ -35,31 +35,20 @@ const fetchTasksFailure = (error) => ({
     }
 });
 
-export const addTask = (task, currentPage, sortOption) => {
+export const updateTaskTable = (task, currentPage, sortOption, isEdit = false, authToken = null ) => {
     return async dispatch => {
         try {
-            await axios.post(`${configData.BACKEND_URL}/tasks`, task);
-            dispatch(fetchTasks(currentPage, sortOption));
-        } catch (error) {
-            let errorText = ''
-            if (error?.response?.data?.error) {
-                errorText = error?.response?.data?.error
+            if (isEdit) {
+                const axiosInstance = axios.create({
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                });
+                await axiosInstance.post(`${configData.BACKEND_URL}/editTask`, task);
             }else{
-                errorText = error.message
+                await axios.post(`${configData.BACKEND_URL}/tasks`, task);
             }
-            dispatch(updateTasksTableFailure(errorText));
-        }
-    };
-};
-export const editTask = (task, currentPage, sortOption, authToken) => {
-    return async dispatch => {
-        try {
-            const axiosInstance = axios.create({
-                headers: {
-                    Authorization: `Bearer ${authToken}`
-                }
-            });
-            await axiosInstance.post(`${configData.BACKEND_URL}/editTask`, task);
+            
             dispatch(fetchTasks(currentPage, sortOption));
         } catch (error) {
             let errorText = ''

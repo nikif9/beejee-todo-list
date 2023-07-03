@@ -13,7 +13,12 @@ class DataBaseModel {
             port: port,
         });
     }
-
+    /**
+     * получаем пользователя из таблицы users для авторизации
+     *
+     * @param {string} username имя/логин пользователя
+     * @return {object} ассоциативный массив виде id: ид пользователя в базе данных, password:хешировыный пароль для дальнейшей сверки
+     */
     async getUserByUsername(username) {
 
         try {
@@ -25,29 +30,43 @@ class DataBaseModel {
             throw err;
         }
     }
-
+    /**
+     * делаем новую запись в таблице tasks
+     *
+     * @param {string} username имя/логин пользователя
+     * @param {string} email электроная почта пользователя
+     * @param {string} taskText текст задачи
+     */
     async createTask(username, email, taskText) {
         try {
             const query = 'INSERT INTO tasks (username, email, task_text) VALUES ($1, $2, $3)';
             await this.pool.query(query, [username, email, taskText]);
-            return true;
         } catch (err) {
             console.error('Error creating task:', err);
             throw err;
         }
     }
-
-    async editTask(username, email, taskText, id) {
+    /**
+     * изменяем текст задачи у созданной записи tasks
+     *
+     * @param {string} taskText текст задачи
+     * @param {integer} id ид задачи в которой будем обновлять текст
+     */
+    async editTask( taskText, id) {
         try {
-            const query = 'UPDATE tasks SET username = $1, email = $2, task_text = $3, edited = true where id = $4';
-            await this.pool.query(query, [username, email, taskText, id]);
+            const query = 'UPDATE tasks SET task_text = $1, edited = true where id = $2';
+            await this.pool.query(query, [taskText, id]);
             return true;
         } catch (err) {
             console.error('Error creating task:', err);
             throw err;
         }
     }
-    
+    /**
+     * изменяем поле status на ture для задач чтобы их завершить
+     *
+     * @param {integer} id ид задачи в которой будем обновлять поле status
+     */
     async completeTasks(id) {
         try {
             const query = 'UPDATE tasks SET status=true WHERE id = $1';
@@ -58,7 +77,14 @@ class DataBaseModel {
         }
     }
 
-
+    /**
+     * получаем данные из таблицы tasks для их последующей отрисовки с пагинацией
+     *
+     * @param {string} sortBy тип сортировки возможны 3 варианта username, email, status остальные не будут работать 
+     * @param {string} sortDirection направление сортировки есть 2 варианта ASC и DESC
+     * @param {integer} page номер страницы какой мы будем показывать
+     * @param {integer} pageSize количество элементов на одной странице 
+     */
     async getTasks(sortBy, sortDirection, page = 1, pageSize = 3) {
         try {
             let totalCount = 0

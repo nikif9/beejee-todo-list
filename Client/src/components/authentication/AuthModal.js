@@ -18,12 +18,9 @@ const AuthModal = ({ isOpen, onRequestClose, errors }) => {
     const handleSubmit = event => {
         event.preventDefault();
         dispatch(loginAuth(login));
-        // onRequestClose();
-        // setlogin({ username: '', password: ''});
     };
     return (
         <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Login Modal">
-            {/* Форма авторизации */}
             <form onSubmit={handleSubmit}>
                 <h1>Login Form</h1>
                 <p>{errors.loginError}</p>

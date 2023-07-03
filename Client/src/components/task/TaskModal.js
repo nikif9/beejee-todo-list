@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTask, editTask } from '../../redux/actions';
+import { updateTaskTable } from '../../redux/actions';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -19,7 +19,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
             setNewTask({ id: '', username: '', email: '', task_text: '' });
         }
     }, [isOpen]);
-
+    //отлавливыаем изенения из стейта errors
     useEffect(() => {
         if (errors.updateTaskTableError == null && isOpen) {
             onRequestClose();
@@ -33,6 +33,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
         setButtonIsDisable(false)
     }, [errors]);
 
+    
     const handleChange = event => {
         const { name, value } = event.target;
         setNewTask(prevState => ({
@@ -40,17 +41,17 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
             [name]: value,
         }));
     };
-
-    const Submit = event => {
+    //обработчик для формы который срабатывает при нажатии на submit
+    const formSubmitHandle = event => {
         event.preventDefault();
         if (!isEdit) {
             setButtonIsDisable(true)
-            dispatch(addTask(newTask, currentPage, sortOption));
+            dispatch(updateTaskTable(newTask, currentPage, sortOption));
         } else {
             const authKey = localStorage.getItem('authenticationKey')
             if (editableTask.task_text !== newTask.task_text.trim()) {
                 setButtonIsDisable(true)
-                dispatch(editTask(newTask, currentPage, sortOption, authKey));
+                dispatch(updateTaskTable(newTask, currentPage, sortOption, isEdit, authKey));
             }else{
                 onRequestClose();
             }
@@ -58,7 +59,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
         }
 
     };
-
+    //фнукция для показа моадального окна при успешном обновлении
     const handleOpenSuccessModal = (text) => {
         setSuccessModalText(text)
         setSuccessModalIsOpen(true);
@@ -76,7 +77,7 @@ const TaskModal = ({ isOpen, onRequestClose, currentPage, sortOption, errors, is
         <div>
             <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
                 <h2> {!isEdit ? "Add Task" : "Edit Task"}</h2>
-                <form onSubmit={Submit} >
+                <form onSubmit={formSubmitHandle} >
                     <h1> {errors.updateTaskTableError} </h1>
                     <label htmlFor="username">Username:</label>
                     <input type="text" disabled={isEdit} id="username" name="username" value={newTask.username} onChange={handleChange} required />

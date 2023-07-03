@@ -18,7 +18,7 @@ const TaskCard = ({ tasks,  isLoggedIn, currentPage, errors}) => {
             alert('ошибка при поптыке завершить задачу: ' + errors.completeTaskError)         
         }
     }, [errors]);
-
+    //обновяем покзываемые задачи
     useEffect(() => {
         dispatch(fetchTasks(currentPage, sortOption));
     }, [dispatch, currentPage, sortOption]);

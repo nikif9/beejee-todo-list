@@ -16,7 +16,7 @@ const TaskMain = () => {
     const pagination = useSelector(state => state.pagination);
     const isLoggedIn = useSelector(state => state.isLoggedIn);
     const errors = useSelector(state => state.errors);
-    
+    //проверка на авторизацию
     useEffect(() => {
         const authKey = localStorage.getItem('authenticationKey')
         if (authKey) {
